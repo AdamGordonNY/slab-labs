@@ -29,6 +29,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    builder.WebHost.UseContentRoot(AppContext.BaseDirectory);
+    // Remove file watchers
+    foreach (var source in builder.Configuration.Sources.OfType<FileConfigurationSource>())
+    {
+        source.ReloadOnChange = false;
+    }
 }
 
 app.UseHttpsRedirection();
