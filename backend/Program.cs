@@ -1,27 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using SlabLabs.Api.Data;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
-
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 // Add services to the container.
-const string FrontendCorsPolicy = "FrontendCors";
+
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs", policy =>
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(FrontendCorsPolicy, policy =>
-    {
-        policy.WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? ["http://localhost:3000"])
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
+
 
 var app = builder.Build();
 
@@ -33,7 +33,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(FrontendCorsPolicy);
+app.UseCors("AllowNextJs");
 
 app.UseAuthorization();
 
