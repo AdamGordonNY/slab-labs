@@ -110,7 +110,7 @@ jobs:
         working-directory: ./backend
         env:
           ASPNETCORE_ENVIRONMENT: Testing
-          DATABASE_CONNECTION_STRING: Host=localhost;Username=testuser;Password=testpassword;Database=testdb
+          ConnectionStrings__DefaultConnection: Host=localhost;Username=testuser;Password=testpassword;Database=testdb
         run: dotnet test --no-restore --verbosity normal
 
   backend-build:
