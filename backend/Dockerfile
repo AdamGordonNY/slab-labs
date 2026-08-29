@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /out .
 
-# Disable file watching for resource-constrained environments
+# Use polling-based file watching to avoid inotify watcher limits (may increase CPU usage)
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 ENV ASPNETCORE_ENVIRONMENT=Production
 
