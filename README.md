@@ -42,3 +42,8 @@ Runs at http://localhost:3000. Set `NEXT_PUBLIC_API_URL` (e.g. in `frontend/.env
 
 - CORS on the backend is configured via `AllowedOrigins` in `appsettings.json` (defaults to `http://localhost:3000`).
 - Use `dotnet ef migrations add <Name>` after modifying `Models`/`AppDbContext` to generate new migrations.
+
+## Development Stages
+
+1. Install CI/CD Workflow - [x]
+2. Set up Oauth with JWTs - [o]
