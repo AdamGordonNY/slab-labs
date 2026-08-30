@@ -1,12 +1,9 @@
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using SlabLabs.Api.Data;
 using Stripe;
-
 var builder = WebApplication.CreateBuilder(args);
-StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
-// Add services to the container.
-
-
+var stripeSecretKey = builder.Configuration["Stripe:SecretKey"];
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
@@ -15,8 +12,8 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -28,7 +25,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+
     builder.WebHost.UseContentRoot(AppContext.BaseDirectory);
     // Remove file watchers
     foreach (var source in builder.Configuration.Sources.OfType<FileConfigurationSource>())
@@ -46,3 +43,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
+
+// Add services to the container.
+
+
+
