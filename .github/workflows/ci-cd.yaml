@@ -148,6 +148,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+      - name: Setup .NET environment
+        run: dotnet tool install --global dotnet-ef
+
       - name: Run EF Core Migrations (Dev)
         if: github.ref == 'refs/heads/develop'
         working-directory: ./backend
