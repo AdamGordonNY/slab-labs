@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Vercel (Dev)
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/development'
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DEV }}
@@ -148,17 +148,20 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+      - name: Setup .NET environment
+        run: dotnet tool install --global dotnet-ef
+
       - name: Run EF Core Migrations (Dev)
         if: github.ref == 'refs/heads/develop'
         working-directory: ./backend
         env:
           ASPNETCORE_ENVIRONMENT: Development
-          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING_DEV }}
+          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
         run: dotnet ef database update
       - name: Run EF Core Migrations (Prod)
         if: github.ref == 'refs/heads/main'
         working-directory: ./backend
         env:
           ASPNETCORE_ENVIRONMENT: Production
-          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING_PROD }}
+          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
         run: dotnet ef database update
