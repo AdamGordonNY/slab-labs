@@ -156,12 +156,12 @@ jobs:
         working-directory: ./backend
         env:
           ASPNETCORE_ENVIRONMENT: Development
-          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+          ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
         run: dotnet ef database update
       - name: Run EF Core Migrations (Prod)
         if: github.ref == 'refs/heads/main'
         working-directory: ./backend
         env:
           ASPNETCORE_ENVIRONMENT: Production
-          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+          ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
         run: dotnet ef database update
