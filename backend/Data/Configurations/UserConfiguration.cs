@@ -1,32 +1,33 @@
-// Data/Configurations/UserConfiguration.cs
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-namespace SlabsLabs.Api.Models.User;
+using SlabLabs.Api.Models;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+namespace SlabLabs.Api.Data;
+
+public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
-    {
-        builder.ToTable("users");
+       public void Configure(EntityTypeBuilder<ApplicationUser> builder)
+       {
+              builder.ToTable("users");
 
-        builder.HasKey(u => u.Id);
+              builder.HasKey(u => u.Id);
 
-        builder.HasIndex(u => u.Email).IsUnique();
+              builder.HasIndex(u => u.Email).IsUnique();
 
-        builder.Property(u => u.Email)
-               .IsRequired()
-               .HasMaxLength(255);
+              builder.Property(u => u.Email)
+                     .IsRequired()
+                     .HasMaxLength(255);
 
-        builder.Property(u => u.PasswordHash)
-               .IsRequired()
-               .HasMaxLength(255);
+              builder.Property(u => u.PasswordHash)
+                     .IsRequired()
+                     .HasMaxLength(255);
 
-        builder.Property(u => u.Role)
-               .HasConversion<string>()
-               .HasMaxLength(50);
+              builder.Property(u => u.Role)
+                     .HasConversion<string>()
+                     .HasMaxLength(50);
 
-        builder.Property(u => u.Status)
-               .HasConversion<string>()
-               .HasMaxLength(50);
-    }
+              builder.Property(u => u.Status)
+                     .HasConversion<string>()
+                     .HasMaxLength(50);
+       }
 }

@@ -1,8 +1,11 @@
-using System;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 
-namespace SlabsLabs.Api.Models;
+namespace SlabLabs.Api.Models;
+
 public class EmailVerificationToken
 {
     public int Id { get; set; }
@@ -14,14 +17,13 @@ public class EmailVerificationToken
     [MaxLength(512)]
     public string Token { get; set; } = string.Empty;
 
-    public DateTime ExpiresAt { get; set; }             // Typically 24–48 hours
+    public DateTime ExpiresAt { get; set; }             // Typically 24ï¿½48 hours
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? VerifiedAt { get; set; }           // Null = unverified
 
-    // Navigation
-    public User User { get; set; } = null!;
+
 
     [NotMapped]
     public bool IsExpired => DateTime.UtcNow >= ExpiresAt;

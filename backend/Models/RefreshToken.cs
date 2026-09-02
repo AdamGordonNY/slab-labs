@@ -1,6 +1,9 @@
-using System;
-using SlabsLabs.Api.Models.User;
-namespace SlabsLabs.Api.Models;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SlabLabs.Api.Models;
+
 public class RefreshToken
 {
     public int Id { get; set; }
@@ -29,8 +32,7 @@ public class RefreshToken
     [MaxLength(512)]
     public string? ReplacedByToken { get; set; }    // Token rotation tracking
 
-    // Navigation
-    public User User { get; set; } = null!;
+
 
     // Computed helpers (not mapped)
     [NotMapped]

@@ -1,5 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+
+using Slablabs.Api.Models;
+
+
+
+using System.ComponentModel.DataAnnotations;
 
 namespace SlabLabs.Api.Models;
 
@@ -7,7 +11,7 @@ namespace SlabLabs.Api.Models;
 
 
 
-public class User
+public class ApplicationUser
 {
     public int Id { get; set; }
     public string Email { get; set; } = string.Empty;
@@ -19,12 +23,12 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? LastLoginAt { get; set; }
     [Required]
-    public UserRole Role { get; set; } = UserRole.User;
+    public UserRole Role { get; set; } = UserRole.Customer;
 
     [Required]
     public UserStatus Status { get; set; } = UserStatus.Active;
 
-        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<PasswordResetToken> PasswordResetTokens { get; set; } = new List<PasswordResetToken>();
     public ICollection<EmailVerificationToken> EmailVerificationTokens { get; set; } = new List<EmailVerificationToken>();
 }
