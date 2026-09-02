@@ -1,8 +1,6 @@
-using System;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SlabLabs.Api.Models;
 
@@ -17,7 +15,7 @@ namespace SlabLabs.Api.Services
             _config = config;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(ApplicationUser user)
         {
             var claims = new[]
             {

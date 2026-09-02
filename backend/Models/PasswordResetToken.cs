@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SlabLabs.Api.Models;
+
 namespace SlabLabs.Api.Models;
 
 public class PasswordResetToken
@@ -10,7 +10,7 @@ public class PasswordResetToken
 
     [Required]
     public int UserId { get; set; }
-    public User User { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
     [Required]
     [MaxLength(512)]
     public string Token { get; set; } = string.Empty;  // Store hashed

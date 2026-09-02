@@ -12,7 +12,7 @@ public class EmailVerificationToken
 
     [Required]
     public int UserId { get; set; }
-    public User User { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
     [Required]
     [MaxLength(512)]
     public string Token { get; set; } = string.Empty;

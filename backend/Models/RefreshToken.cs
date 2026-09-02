@@ -11,7 +11,7 @@ public class RefreshToken
     [Required]
     public int UserId { get; set; }
 
-    public User User { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
 
     [Required]
     [MaxLength(512)]

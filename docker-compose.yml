@@ -1,57 +1,51 @@
-    services:
-      frontend:
-        build:
-          context: ./frontend
-          target: dev          # use 'production' when deploying
-          dockerfile: Dockerfile
-        ports:
-          - "3000:3000"
-        environment:
-          - NEXT_PUBLIC_API_URL=http://localhost:5000
-        volumes:
-          - ./frontend:/app    # hot reload for Next.js
-          - /app/node_modules  # keep container's node_modules intact
-        depends_on:
-          - backend
-
-      backend:
-        build:
-          context: ./backend
-          dockerfile: Dockerfile
-        ports:
-          - "5000:8080"
-        env_file:
-          - ".env"
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
-        depends_on:
-          db:
-            condition: service_healthy
-        healthcheck:
-            test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
-            start_period: 15s
-      db:
-        image: postgres:16
-        restart: unless-stopped
-        env_file:
-          - .env
-        environment:
-            POSTGRES_USER: ${DB_USER}
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
-            POSTGRES_DB: ${DB_NAME}
-        ports:
-          - "5432:5432"
-        volumes:
-          - postgres_data:/var/lib/postgresql/data
-        healthcheck:
-          test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-          interval: 5s
-          timeout: 5s
-          retries: 5
-
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: dev          # use 'production' when deploying
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
     volumes:
-      postgres_data:
+      - ./frontend:/app    # hot reload for Next.js
+      - /app/node_modules  # keep container's node_modules intact
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    env_file:
+      - ".env"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
