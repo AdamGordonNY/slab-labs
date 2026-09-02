@@ -1,44 +1,55 @@
-services:
-  frontend:
-    build:
-      context: ./frontend
-      target: dev          # use 'production' when deploying
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:5000
-    volumes:
-      - ./frontend:/app    # hot reload for Next.js
-      - /app/node_modules  # keep container's node_modules intact
-    depends_on:
-      - backend
+    services:
+      frontend:
+        build:
+          context: ./frontend
+          target: dev          # use 'production' when deploying
+        ports:
+          - "3000:3000"
+        environment:
+          - NEXT_PUBLIC_API_URL=http://localhost:5000
+        volumes:
+          - ./frontend:/app    # hot reload for Next.js
+          - /app/node_modules  # keep container's node_modules intact
+        depends_on:
+          - backend
 
-  backend:
-    build:
-      context: ./backend
-    ports:
-      - "5000:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=db;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-    depends_on:
+      backend:
+        build:
+          context: ./backend
+        ports:
+          - "5000:8080"
+        env_file:
+          - ".env"
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+        depends_on:
+          db:
+            condition: service_healthy
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
       db:
-        condition: service_healthy
+        image: postgres:16
+        restart: unless-stopped
+        env_file:
+          - .env
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME
+        ports:
+          - "5432:5432"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+          test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+          interval: 5s
+          timeout: 5s
+          retries: 5
 
-  db:
-    image: postgres:16
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres_data:
+      postgres_data:
