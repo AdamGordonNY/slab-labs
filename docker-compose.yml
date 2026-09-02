@@ -3,6 +3,7 @@
         build:
           context: ./frontend
           target: dev          # use 'production' when deploying
+          dockerfile: Dockerfile
         ports:
           - "3000:3000"
         environment:
@@ -16,6 +17,7 @@
       backend:
         build:
           context: ./backend
+          dockerfile: Dockerfile
         ports:
           - "5000:8080"
         env_file:
@@ -40,7 +42,7 @@
         environment:
             POSTGRES_USER: ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
-            POSTGRES_DB: ${DB_NAME
+            POSTGRES_DB: ${DB_NAME}
         ports:
           - "5432:5432"
         volumes:
