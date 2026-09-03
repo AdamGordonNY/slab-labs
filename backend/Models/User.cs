@@ -1,11 +1,9 @@
 
 using Slablabs.Api.Models;
-
-
-
+using Slablabs.Api.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace SlabLabs.Api.Models;
+namespace Slablabs.Api.Models;
 
 
 

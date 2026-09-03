@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-using SlabLabs.Api.Models;
+using Slablabs.Api.Models;
 
 namespace SlabLabs.Api.Data;
 

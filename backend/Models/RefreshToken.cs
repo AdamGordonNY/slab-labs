@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SlabLabs.Api.Models;
+namespace Slablabs.Api.Models;
 
 public class RefreshToken
 {
@@ -43,4 +43,9 @@ public class RefreshToken
 
     [NotMapped]
     public bool IsActive => !IsExpired && !IsRevoked;
+
+    public static implicit operator string(RefreshToken v)
+    {
+        throw new NotImplementedException();
+    }
 }

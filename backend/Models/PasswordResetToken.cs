@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SlabLabs.Api.Models;
+namespace Slablabs.Api.Models;
 
 public class PasswordResetToken
 {

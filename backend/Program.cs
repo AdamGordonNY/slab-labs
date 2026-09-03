@@ -1,13 +1,12 @@
 using System.Text;
-using System.Text;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SlabLabs.Api.Data;
 using SlabLabs.Api.Services;
-using Stripe;
-using System.IdentityModel.Tokens.Jwt;
+
+using SlabLabs.Api.Core.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var stripeSecretKey = builder.Configuration["Stripe:SecretKey"];
 builder.Services.AddControllers();
@@ -27,7 +26,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddHealthChecks();
 
-builder.Services.AddScoped<JWTService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -74,8 +74,6 @@ app.Run();
 
 
 
-
-// Add services to the container.
 
 
 

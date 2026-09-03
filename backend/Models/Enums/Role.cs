@@ -1,4 +1,4 @@
-namespace Slablabs.Api.Models;
+namespace Slablabs.Api.Models.Enums;
 
 public enum UserRole
 {

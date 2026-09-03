@@ -2,17 +2,19 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using SlabLabs.Api.Models;
+using Slablabs.Api.Models;
 
-namespace SlabLabs.Api.Services
+namespace Slablabs.Api.Services
 {
     public class JWTService
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<JWTService> _logger;
 
-        public JWTService(IConfiguration config)
+        public JWTService(IConfiguration config, ILogger<JWTService> logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         public string GenerateToken(ApplicationUser user)
@@ -38,5 +40,33 @@ namespace SlabLabs.Api.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public ClaimsPrincipal? ValidateToken(string token)
+        {
+            try
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+                var handler = new JwtSecurityTokenHandler();
+
+                var principal = handler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = true,
+                    ValidIssuer = _config["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = _config["Jwt:Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                return principal;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Token validation failed: {ex.Message}");
+                return null;
+            }
+        }
     }
+
 }
